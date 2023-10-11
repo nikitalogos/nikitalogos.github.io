@@ -1,0 +1,277 @@
+## (Not) a Brief Introduction
+
+### Thoughts on Construction Kits
+
+The main principle of any construction kit is the provision of a limited set of ready-made components that are compatible with each other and capable of combining to provide many specific solutions.
+
+Here are some examples of construction kits:
+
+1. The Arduino ecosystem is a family of AVR controllers, as well as numerous sensors, actuators, and other modules compatible with these controllers.
+2. Console utilities in Linux are created on the principle of modularity. Each program solves one task and does it well. Thanks to this, they can be conveniently combined to solve higher-level tasks.
+3. PVC plumbing pipes not only do an excellent job with their primary task but also serve as excellent raw material for DIY projects, such as potato cannons ([one](https://www.popularmechanics.com/home/a40751927/diy-potato-cannon/) and [two](https://www.techinsider.ru/diy/11821-surovyy-samopal-pushka/)).
+
+To assess the quality of a construction kit, one must consider not only how well the specific solutions obtained from it work but also its combinatorial complexity, i.e., how many different specific solutions can be obtained from one set of details.
+
+In my opinion, a good construction kit should provide maximum variability with a minimum set of components.
+
+Thus, subatomic particles can be called the most perfect construction kit, as everything in the Universe can be constructed from just six quarks and a handful of particles, including all possible construction kits and their builders :)
+
+If you think in these terms, IKEA furniture is not a construction kit at all because there is only one way to assemble them together for each set of parts. You can't buy a wardrobe set and assemble two chests of drawers instead, unfortunately :(
+
+*But there are pleasant exceptions :) Picture taken [from here](https://www.designboom.com/design/ikea-furniture-forts-05-14-2020/)*
+
+![IKEA fortress & house](https://logosnikita.com/posts/pine_craft/images/ikea_fortress_house.jpg)
+
+The well-known LEGO construction kit is perfect for imitating reality. However, for the sake of realism, it uses thousands of specialized parts, such as flags, briefcases, palm leaves, and so on. This makes LEGO not as universal as it could be.
+
+But if you look at amateur LEGO, you can see an amazing thing: it turns out that just one shape - a 2x3 piece - is enough to build almost any structure. In practice, 1x1, 2x4, and other parts are also used, but 2x3 is the most universal building unit.
+
+*Penguin Tux from the Mega Blocks construction kit. Taken [from here](https://commons.wikimedia.org/wiki/File:Tux,_Mega_Bloks_05.jpg)*
+
+![Tux from Mega Blocks](https://logosnikita.com/posts/pine_craft/images/Tux_Mega_Bloks_05.jpg)
+
+### Background
+
+As you can see, I love construction kits! So, creating my own was only a matter of time for me...
+
+Construction kits are everywhere around us, but for some reason, there is no "LEGO for adults." I mean a kit that is universal enough to assemble any shape, but at the same time does not require additional tools or modification of the original parts using a saw or drill.
+
+All adult construction kits are either too specialized, like plumbing pipes, or are semi-finished products, like construction profiles, requiring preliminary cutting into sections of the desired length.
+
+*Practical posts from construction profiles in Tel Aviv:*
+
+![Tel Aviv poles](https://logosnikita.com/posts/pine_craft/images/tel_aviv_poles.jpg)
+
+I wanted to have a construction kit that could be used at home, without the need to cut or drill anything in the workshop/garage. Of course, having access to a workshop is cool, but not everyone has that option, and not always.
+
+During my school years, when I participated in robot competitions, I got to know the MATRIX and TETRIX construction kits. They were suitable for building small robots - up to a meter in size and weighing up to 30 kg. Unfortunately, the kit was unjustifiably expensive, and its dimensions and allowable loads were too small.
+
+*Robot from the TETRIX construction kit:*
+
+![TETRIX robot](https://logosnikita.com/posts/pine_craft/images/tetrix_robot.jpg)
+
+While studying at the university, I was a regular at FabLab - an open workshop for maker enthusiasts. At that time, I was satisfied with specialized ad hoc solutions - after all, I could come to FabLab and cut a part of any shape from plywood for any task on a laser cutter within a couple of hours.
+
+*New Year's FabLab ITMO, St. Petersburg - on the left. The frame of a 3D scanner - on the right*
+
+![FabLab times](https://logosnikita.com/posts/pine_craft/images/fablab_times.jpg)
+
+But time went on, and once, after reading Edward Gordon's book "Structures: Or Why Things Don't Fall Down," I became inspired to test the principles described there in practice. At that time, my wife and I lived in a rented apartment, and we were catastrophically short of furniture. I thought it would be nice to make it myself and at the same time experiment with a construction kit.
+
+Thus was born the first iteration of Pine Craft!
+
+![Pine Craft intro](https://logosnikita.com/posts/pine_craft/images/pine_craft_intro.jpg)
+
+
+
+
+## Development of Pine Craft
+  
+### 1. Shape
+  
+In construction, there are several forms that are used more often than others:
+  
+1. Triangle - this is the only rigid polygon, meaning that the triangle cannot be deformed as long as its sides retain their shape. For comparison, a square can be easily squashed into a rhombus, a rectangle into a parallelogram, etc.
+2. Rectangle/parallelepiped - these are shapes with orthogonal sides, optimal for tiling a plane/space. Therefore, for example, pixels and voxels are usually rectangular.
+3. Circle, sphere, cylinder - these are bodies formed by rotation and possessing central symmetry. They are useful where there is no single direction of load action, for example, in pipes, where water presses equally in all directions.
+4. Equilateral hexagon - it is good in that it can also tile a plane, as bees do with their honeycombs. Hexagons are rarely used for load-bearing structures, but they can be found in cellular arrays, such as fishing nets, cellular communication stations, etc.
+    1. Interestingly, a hexagonal grid is the optimal way to pack circles on a plane. It can be created by pouring many identical balls (or coins) onto a flat surface.
+    2. If you connect the vertices of the hexagons with their centers, you will get a grid of equilateral triangles.
+  
+*Tiling a plane with triangles, squares, and hexagons/coins:*
+  
+![Fractals 3, 4, 6](https://logosnikita.com/posts/pine_craft/images/fractals_3_4_6.jpg)
+
+*Armature triangles form the final rectangular cross-section of both the crane boom and the electric pole:*
+  
+![Triangles](https://logosnikita.com/posts/pine_craft/images/triangles.jpg)
+  
+*Rectangular grid of eco-trail in Govorovsky forest, Moscow:*
+  
+![Squares](https://logosnikita.com/posts/pine_craft/images/squares.jpg)
+  
+Yet, the rectangular shape has several advantages over others in creating a construction kit:
+1. In an orthogonal construction, each direction is linearly independent of the others. This simplifies design as each part can be developed independently, and they will almost always fit together well.
+2. The construction kit requires arrays of holes for attaching parts to each other. To make the parts connect predictably, the hole pattern must tile the plane well, in which both rectangular and triangular patterns are good.
+3. However, the rectangular is better than the triangular due to evenness. So, to make a typical structure in a rectangular grid - a square - you will need 4 beams: 2 on top and 2 on the bottom. But if we want to build a primitive triangular grid - a triangle, we will need 3 parts that cannot be connected just like that: additional connecting parts will be required.
+4. The world in which we live is already quite rectangular - tables, dressers, wardrobes - all of these are parts of one big Tetris that makes up our environment. Therefore, a rectangular structure will fit perfectly into the surroundings!
+  
+*Four flat beams connect well into a square: 2 from below and 2 from above. Connecting with a triangle is a bit more complex :)*
+  
+![Connections 3, 4](https://logosnikita.com/posts/pine_craft/images/connections_3_4.jpg)
+  
+In short, I settled on an orthogonal design for the construction kit.
+
+### 2. Material
+
+Materials suitable for building constructions can be divided into categories based on the number of dimensions:
+1. linear (beams) - boards, tubes, sticks, etc.
+2. flat (sheet) - plywood, drywall, etc.
+3. volumetric - foam mattress, concrete foundation
+
+*An example of a volumetric construction kit. The foam inside the case is divided into easily detachable cubes, allowing for the creation of a cutout that exactly matches the shape of the transported part:*
+
+![Foam rubber cubes](https://logosnikita.com/posts/pine_craft/images/foam_rubber_cubes.jpg)
+
+For construction kit tasks, we will primarily be interested in the first two types of materials.
+
+Beams form the frame of the construction, i.e., auxiliary parts needed solely to bring something to a particular point in space. A lamp leg is needed not for itself, but so that the bulb is positioned in the air above the floor and does not fall down. Table legs are only needed to bring its surface to a person's waist level.
+
+Many constructions only need beams to function: for example, the working body of a cell tower - the antenna - is attached directly to the beams.
+
+However, if we talk about furniture, then planes come to the fore: the tabletop is the working body of the table, and the only thing essentially needed to call a table a table. If the tabletop is suspended from the ceiling, attached to the wall, or even levitating in the air - it will still be a table!
+
+A plane can perform the functions of a frame - for example, the walls of a wardrobe not only protect clothes from dust and sunlight but also bear its weight. However, usually, plates do not do this as efficiently as beams. If the task of protecting from dust disappears, it will be better to replace the walls of the wardrobe with load-bearing beams - and instead of a wardrobe, we will get a rack.
+
+---
+
+For my construction kit, I needed both planes and beams. As a material, I decided to use plywood, as both can be made from it using a laser cutter.
+
+Plywood is an excellent material. Due to the alternation of layers of wood, in which fibers are oriented lengthwise and crosswise, plywood has equal strength in all directions, unlike boards or beams, whose strength across fibers is an order of magnitude lower than along them. This fact will make the use of construction kit parts more simple and predictable.
+
+In addition, plywood is a cheap and environmentally friendly material. Manufacturing parts on a laser cutter is also much cheaper and more accessible than, for example, processing aluminum.
+
+---
+
+An interesting alternative would be to create a construction kit based on pipes. A round cross-section resists bending loads well, so pipe products are very light. There are quite a few suitable tubular materials for sale - from aluminum pipes to bamboo.
+
+*Bamboo and a chair made from it, Japan, Kyushu Island:*
+
+![Pipe connectors](https://logosnikita.com/posts/pine_craft/images/bamboo.jpg)
+
+An interesting engineering challenge would be the development of optimal fittings for connecting pipes to each other and other parts. For example, these could be the fittings compatible with Pine Craft:
+
+![Pipe connectors](https://logosnikita.com/posts/pine_craft/images/pipe_connectors.jpg)
+
+Since the tubular construction kit would include only beams, it would need additional material to create working surfaces. This could be plywood or, for example, fabric - this way, you could create a hanging chair or hammock.
+
+*A chair made of steel rebar. The role of the working surface - the seat - is performed by a piece of fabric:*
+
+![Wireframe chair](https://logosnikita.com/posts/pine_craft/images/wireframe_chair.jpg)
+
+### 3. Implementation
+
+I chose a square - a cell, as the basic section of the construction kit. The dimensions of all the details can be expressed in cells: beams - rectangles with aspect ratios of 1x3, 1x5, 1x10, etc. Plates - rectangles 10x10, 10x20, etc.
+
+For simplicity, I abandoned non-rectangular parts - g-shaped, s-shaped, etc. Firstly, this simplifies the layout of parts on a plywood sheet for further cutting. Secondly, complex-shaped details are not really necessary, and if needed, they can be easily made from a set of simple ones. As we remember, the beauty of the construction kit is revealed in its succinctness!
+
+*A drawing for cutting out a set of parts for assembling a stool from plywood. My drawing generator can be found [here](https://github.com/nikitalogos/pine_craft)*
+
+![Stool layout](https://logosnikita.com/posts/pine_craft/images/stool_layout.jpg)
+
+Plywood parts should be connected with screws. For this, I placed a cross with holes on the basic section. The cross is needed so that the parts can be connected both lengthwise and across. One hole in the center will not work: then the connection will not be able to withstand the torque.
+
+The width of the crosspiece is equal to half the basic section. In this way, we get a pattern of holes, going evenly with a half step. This will allow the parts to be connected in many ways.
+
+![Pine Craft beam](https://logosnikita.com/posts/pine_craft/images/pine_craft_beam.jpg)
+
+Plates and beams are good, but so far, they cannot go beyond the plane. To make the construction kit three-dimensional, a "corner" is needed, which in this case is more like a "cube". Here's what this part of the construction kit looks like:
+
+![Pine Craft cube](https://logosnikita.com/posts/pine_craft/images/pine_craft_cube.jpg)
+
+The cube consists of 4 separate parts that are held together by slots and the force of tightening screws. I could not create a cube from plywood that connects three planes at once - the parts would have been too unreliable. Then I printed the cube on a 3D printer, but it was not useful to me. As it turned out, connecting two planes at a time is enough.
+
+![3D printed cube](https://logosnikita.com/posts/pine_craft/images/3d_printed_cube.jpg)
+
+### Scale
+
+I was interested in creating a construction kit, designed for objects ranging from half a meter to two meters in size, capable of withstanding loads of about 10-100 kg.
+
+Since the material was chosen, it remained to determine the thickness and dimensions of the parts themselves. Plywood 3-4 mm thick does not have sufficient rigidity for the given range of sizes and loads. Plywood 8 mm thick is difficult to cut with commonly used 60 and 100-watt laser cutters. In the end, I settled on a thickness of 6 mm.
+
+I chose a cell size of the construction kit as 30x30 mm, by eye: on the one hand, the parts are lightweight but strong; on the other hand, the size of the crosspiece is sufficient to counteract the bending moment in the fasteners. Also, the multiplicity of the width and thickness of the material (30 = 6 x 5) greatly simplifies life.
+
+For the chosen sizes, M4 screws were suitable. I chose screws with a hexagon head, as they wear out less with repeated use and the chance of stripping them when tightening is lower. I chose lengths of 20 and 50 mm - short screws allow connecting two parts, and long ones - seven, that is, one cube and two more parts:
+
+![Screw lengths](https://logosnikita.com/posts/pine_craft/images/screw_lengths.jpg)
+
+For M4 screws, a hexagon with a side of 3 mm will do. It is better to take a hexagon with a comfortable handle, as there will be a lot of screws to turn :) And it's even better to purchase a compact screwdriver!
+
+I chose nuts with a flange - in theory, they should grip the plywood better and prevent unscrewing. For tightening nuts, you can use a 7 mm wrench, but in fact, you can do without it.
+
+For accuracy, here is the nomenclature of the fasteners:
+1. Screw DIN912 4x20
+2. Screw DIN912 4x50
+3. Flanged nut DIN6923 m4
+
+
+
+
+## Pine Craft in Action (Just Add Screws)
+
+### Stool
+
+This stool is one of the first structures from Pine Craft. I have special feelings for it because of its simplicity and elegance. The stool turned out to be very sturdy, and you can not only sit on it but also stand on it with your feet to explore the upper shelves of cabinets :)
+
+![Stool](https://logosnikita.com/posts/pine_craft/images/assembly_stool.jpg)
+
+### Chair
+
+If you add a backrest to the stool, you'll get a chair! The rigid back helps maintain posture, and also serves as an excellent clothes hanger :)
+
+![Chair](https://logosnikita.com/posts/pine_craft/images/assembly_chair.jpg)
+
+### Shelves
+
+It is especially easy to make shelves from Pine Craft. On the left is a rack for containers with tools, in the center - a shoe rack, and on the right - a shelf for small items:
+
+![Racks](https://logosnikita.com/posts/pine_craft/images/assembly_racks.jpg)
+
+### Shelf for Dresser
+
+You can increase the surface of the dresser by placing such a shelf on it.
+
+![Shelf over commode](https://logosnikita.com/posts/pine_craft/images/assembly_shelf_over_commode.jpg)
+
+### Lifehacks
+
+1. There was a computer desk in the rented apartment with a very inconvenient cutout for the monitor. It had to be slightly modified...
+
+2. The design of the bed also left something to be desired. Instead of making the bed's headboard straight so that it could be pushed tightly against the wall, it was made semi-circular for some reason. As a result, there was a large gap where things constantly fell. However, fixing this was not too difficult :)
+
+3. The baseboard was in the way of pushing the robot vacuum cleaner's charging station against the wall, and every time the robot came to the base, it tilted it and couldn't recharge. A small spacer from the construction kit fixed the situation.
+
+4. After moving, we bought a temporary scratching post for the cat. It turned out to be very unstable - when the kitty leaned on it with all his weight, it would tip over. Plates from Pine Craft added the necessary mass and support area to the base of the scratching post. The cat is happy :)
+
+![Lifehacks](https://logosnikita.com/posts/pine_craft/images/assembly_lifehacks.jpg)
+
+The projector stand allows you to direct its beam vertically upwards. Hooray, now you can watch your favorite movies directly on the ceiling!
+
+![Projector](https://logosnikita.com/posts/pine_craft/images/assembly_projector.jpg)
+
+Some parts of the construction kit are useful in themselves, even without assembly. For example, long beams can be used to retrieve items from under the bed, and the plates work great as a laptop stand!
+
+![No assembly](https://logosnikita.com/posts/pine_craft/images/no_assembly.jpg)
+
+
+## Pine Craft in Art
+
+While I was writing this article, my incredible wife made a very cute video dedicated to Pine Craft:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/A3GeZmPa8k8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+... and a cool logo! (see video)
+
+A little backstage from the animation shoot (yes, of course, with the construction kit :)):
+
+![Video backstage](https://logosnikita.com/posts/pine_craft/images/video_backstage.jpg)
+
+Note to the housewife: you can turn a boring wall into a fashionable stand for hair accessories with Pine Craft:
+
+![Accessories stand](https://logosnikita.com/posts/pine_craft/images/accessories_stand.jpg)
+
+
+
+## Conclusion
+
+I hope this article has been helpful to you!
+
+Here you can find the GitHub repository of the project with the part generator and assembly instructions: [Pine Craft @ GitHub](https://github.com/nikitalogos/pine_craft)
+
+And here's my website with other projects: [logosnikita.com](https://logosnikita.com)
+
+What kind of construction kits do you use? I'll be waiting for your examples in the comments)
+
+Have a great day, bye-bye!
+
+![Liu Kang](https://logosnikita.com/posts/pine_craft/images/liu_kang.jpg)
