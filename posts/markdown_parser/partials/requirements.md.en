@@ -1,0 +1,35 @@
+1. headers (h1 - h6)
+2. text blocks
+	- line breaks
+3. quotes (>)
+	1. nested quotes
+4. code blocks (```a = b```)
+	- escape chars
+	- syntax highlight
+5. lists
+	1. enumerated (1.)
+	2. bulleted (-)
+	3. mixed
+6. text decoration
+	1. italic (*)
+	2. bold (**)
+	3. bold italic (***)
+	4. underscored (<u>text</u>)
+	5. strikethrough (~~)
+	6. highlighted (==)
+	7. one line code (`code`)
+	8. subscript (~a~)
+	9. superscript (^a^)
+7. links
+	1. external (links to the web)
+	2. internal (links to headings)
+8. media
+	1. image
+	2. emoji
+9. tables
+10. other
+	1. Escaped special symbols
+	2. hline (---)
+11. html
+	- render html
+	- preserve it "as is"

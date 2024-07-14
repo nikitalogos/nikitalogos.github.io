@@ -1,0 +1,7 @@
+![Cover](https://logosnikita.com/posts/markdown_parser/images/cover.jpg)
+
+Recently I decided to build my personal website, and thus I needed to choose a Markdown parser for rendering articles in the blog.
+
+What started as a simple "Оkay, google, what's the best parser?" eventually turned into a full-scale investigation of existing parser realizations.
+
+This is an article about my discoveries and insights on this survey.

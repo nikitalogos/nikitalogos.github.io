@@ -1,0 +1,575 @@
+## Intro
+
+I really love Markdown. It's a powerful yet laconic markup language. It's based on the concept of separation data from representation. This makes Markdown useful in a variety of applications, for example, in version control. That's why, for instance, Markdown is a standard tool for documentation on GitHub.
+
+Markdown is widely distributed across the web as a markup language for text editors: on blogging platforms, wiki projects etc. Personally, I use Markdown every day not only for software development, but also for taking notes. I use [Obsidian](https://obsidian.md/): a Markdown-based ide-like note-taking app for knowledge base management.
+
+> Generally speaking, Obsidian is one of the best note-taking apps ever. If you haven't already heard about it or about [zettelkasten](https://en.wikipedia.org/wiki/Zettelkasten) principle, maybe you should take a look at [this](https://www.reddit.com/r/ObsidianMD/) and [this](https://zettelkasten.de/introduction/).
+
+Recently I decided to build my personal [website](https://logosnikita.com), and thus I needed to choose a markup language for articles. Of course, I chose Markdown. All that was left was to figure out the rest of the stack.
+
+Searching for ready solutions, I stumbled upon [jekyll](https://jekyllrb.com/) - a Markdown-based static website generator. It looked like a not bad solution for minimalists, but for me it had too many limitations. Finally, I decided to stay with my favourite framework [vue.js](https://vuejs.org/) and use some library for Markdown to HTML conversion. And that's where the fun things started...
+
+## Tool Selection
+
+Thanks to openness, relative simplicity and popularity of Markdown among developers, there are several dozens of Markdown realizations in various programming languages. A far from complete list of realizations you can find [here](https://github.com/markdown/markdown.github.com/wiki/Implementations).
+
+As soon as I saw all this multitude of solutions, my first thought was to write my own from scratch ~~and fingers stretched themselves to the keyboard~~, but I bravely overcame myself. Instead, I decided to compare parsers and choose the best one.
+
+Of course, for static pages rendering it's possible to choose realization in any programming language, but I decided to stay with pure-JavaScript solutions for flexibility.
+So, I had 9 candidates left:
+1. [commonmark.js](https://github.com/commonmark/commonmark.js)
+2. [markdown-js](https://github.com/evilstreak/markdown-js)
+3. [markdown-it](https://github.com/markdown-it/markdown-it)
+4. MarkdownDeep - [GitHub](https://github.com/toptensoftware/markdowndeep) and [website](https://www.toptensoftware.com/markdowndeep/)
+5. [Marked](https://github.com/markedjs/marked)
+6. [remark](https://github.com/remarkjs/remark)
+7. [remarkable](https://github.com/jonschlinkert/remarkable)
+8. [Showdown](https://github.com/showdownjs/showdown)
+9. [texts.js](https://github.com/sheremetyev/texts.js)
+
+For comparison of parsers, I came up with this list of parameters:
+1. licence
+2. infrastructure
+	1. documentation
+	2. availability of demo
+	3. active community
+3. support of a certain subset of Markdown syntax
+4. ability to modify parser's behaviour
+5. performance
+
+### Licences
+
+So, let's get started! Will with the license.
+Everything is simple here:
+1. [commonmark.js licence](https://github.com/commonmark/commonmark.js/blob/master/LICENSE) - 2-clause BSD with two dependencies, both MIT
+2. [markdown-js licence](https://github.com/evilstreak/markdown-js#license) - MIT
+3. [markdown-it licence](https://github.com/markdown-it/markdown-it/blob/master/LICENSE) - MIT
+4. [MarkdownDeep licence](https://github.com/toptensoftware/markdowndeep/blob/master/MarkdownDeepJS/MarkdownDeep%20License.txt) - Apache 2.0
+5. [Marked licence](https://github.com/markedjs/marked/blob/master/LICENSE.md) - MIT, refers to John Gruber, the creator of Markdown language (who distributes it under the 3-clause BSD licence), which is quite cute :)
+6. [remark licence](https://github.com/remarkjs/remark/blob/main/license) - MIT
+7. [remarkable licence](https://github.com/jonschlinkert/remarkable/blob/master/LICENSE) - MIT
+8. [Showdown licence](https://github.com/showdownjs/showdown/blob/master/LICENSE) - MIT
+9. [texts.js licence](https://github.com/sheremetyev/texts.js/blob/master/LICENSE) - Apache 2.0
+
+In other words, all projects are distributed under free licenses, which is to be expected.
+
+### Infrastructure
+
+All projects more or less have documentation, so let's skip this part.
+
+As for demo, things are not so good:
+1. [commonmark.js demo](https://spec.commonmark.org/dingus/)
+2. markdown-js demo - not present
+3. [markdown-it demo](https://markdown-it.github.io/)
+4. [MarkdownDeep demo](https://www.toptensoftware.com/markdowndeep/dingus)
+5. [Marked demo](https://marked.js.org/demo/)
+6. remark demo - not present
+7. [remarkable demo](https://jonschlinkert.github.io/remarkable/demo/)
+8. [Showdown demo](http://demo.showdownjs.com/)
+9. texts.js demo - not present
+
+It's hard to estimate the support of the community without diving deep into a project and encountering difficulties within it. Project can be evaluated implicitly by the number of stars on GitHub, but I won't do this for ethical reasons.
+
+Speaking about activity:
+1. markdown-js project is currently not maintained, the last commit was in 2019
+2. texts.js - last commit in 2013
+3. remarkable - last commit in November 2021 (which is not so old)
+4. the rest of the projects have commits in this year, so we can consider them active
+
+### Syntax
+
+That's probably the most important part. At first, I've put together a list of all the syntax I need:
+
+<details>
+  <summary>Markup requirements</summary>
+
+---
+
+@include "./partials/requirements.md.en"
+
+---
+
+</details>
+
+For testing parsers, I've made a text with examples of all required markup:
+
+[Test text (raw)](https://logosnikita.com/posts/markdown_parser/partials/text_for_testing.md)
+
+<details>
+  <summary>Test text (preview)</summary>
+
+---
+
+@include "./partials/text_for_testing.md"
+
+---
+
+</details>
+
+I didn't want to spend time on installation of all the parsers, so I tested only those that had a demo. If you want, you can test others yourself using the above text (or any other).
+
+Now, let's move on to the results. But first:
+
+#### A little note
+
+After writing the article, I found out that the Markdown standard supports the line break functionality in a text block (like `<br>` tag in HTML). To break the line, you need to add two spaces at the end of the previous line, and start a new one on the next line.
+
+All the parsers mentioned in the article support this function. At the time of writing this article, I did not know about this, so I was checking parsers for supporting the line break without two-space padding.
+
+Personally, I think adding two extra spaces seems inconvenient and redundant. It's also lacks clarity, because spaces are not displayed in the text editor window. Therefore, I decided to leave the check for "line break without extra spaces" in the article, but as a pleasant bonus instead of a critical feature.
+
+#### commonmark.js
+
+What doesn't work:
+1. line break in text blocks (without two extra spaces)
+2. syntax highlight
+3. text decoration
+    1. strikethrough (need to use `<del>`)
+    2. highlight (need to use `<mark>`)
+    3. subscript
+    4. superscript
+4. tables
+
+It's quite inconvenient that links don't work in the demo and iframe with YouTube video don't render, but the raw HTML code seems to be correct.
+
+#### markdown-it
+
+Everything works fine!
+
+What can be turned on optionally:
+1. line break in text blocks (without two extra spaces)
+2. HTML parsing
+
+#### MarkdownDeep
+
+It seems to be the most buggy Markdown parser of examined.
+
+What doesn't work:
+1. line break in text blocks (without two extra spaces)
+2. nested quote interferes with the list element
+3. code blocks
+    1. line break in code
+    2. syntax highlight
+    3. special symbols escaping
+    4. code is duplicated somewhy: once as code and then once again as text
+4. text decoration
+    1. strikethrough
+    2. highlight
+    3. subscript
+    4. superscript
+5. iframe doesn't work
+
+Bugs with quotes and code blocks themselves:
+
+![Bugs](https://logosnikita.com/posts/markdown_parser/images/markdowndeep_bugs.png)
+
+What's wrong here:
+1. text `- list in quote` should be on the next line
+2. all the text inside code block goes in one line
+3. special symbols \`\`\`<!--`--> ended up outside the code block
+4. text from the last code block is repeated - but now as Markdown
+
+#### Marked
+
+What doesn't work
+1. text decoration
+    1. strikethrough
+    2. highlight
+    3. subscript
+    4. superscript
+2. tables
+
+What can be turned on optionally:
+1. line break in text blocks (without two extra spaces)
+2. Demo doesn't support syntax highlight. However, in config there are fields `"highlight": null` and `"langPrefix": "language-"` indicating that syntax highlighting can somehow be enabled. However, I didn't understand how to do it.
+
+Iframe with YouTube video doesn't render, but the raw HTML code seems to be correct.
+
+#### remarkable
+
+Everything works fine!
+
+What can be turned on optionally:
+1. line break in text blocks (without two extra spaces)
+2. HTML parsing
+
+This project resembles markdown-it a lot and for a good reason (see below).
+
+#### Showdown
+
+What doesn't work
+1. Headings h5 and h6
+2. line break in text blocks (without two extra spaces)
+3. syntax highlight
+4. text decoration
+    1. highlight
+    2. subscript
+    3. superscript
+5. iframe doesn't work
+
+Something strange is going on with headers: `#` is translated into `<h3>`, `##` into `<h4>` etc. So, there are no tags left in HTML for header of levels 5 and 6. So they are translated into plain text. It prevents them from being styled correctly via CSS, and also leads to a bug with the transfer to the next line:
+
+![Bugs](https://logosnikita.com/posts/markdown_parser/images/showdown_bugs.png)
+
+In the demo interface, there are checkboxes to enable options, but they don't work. When you click on the checkbox the page reloads but the changes don't apply.
+
+Judging by the name of one of the checkboxes (`simpleLineBreaks`) it should be possible to enable line breaks, but I failed to make it work.
+
+#### Bonus: Obsidian
+
+After all, I wanted to check my note-taking app Obsidian as well, because that's where I will write my articles before uploading them to the website. (You can guess where I typed _this_ article \^\_\^). Happily, Obsidian easily coped with everything except subscript and superscript. But this is excusable🙃.
+
+#### Bonus 2: PyCharm
+
+I write code for my website in PyCharm Community Edition, which, in turn, has embedded Markdown viewer, so... yes, you got it right :)
+
+What doesn't work
+1. line break in text blocks (without two extra spaces)
+2. text decoration
+    1. highlight
+    2. subscript
+    3. superscript
+3. internal links don't work inside IDE
+4. special symbols escaping somewhy displays backslashes before symbols while normally should hide them
+5. iframe doesn't work
+
+What works partially:
+1. Syntax highlight only works for Python. Maybe it's all about the Community Edition, and Enterprise Edition supports other languages as well, but I haven't checked it.
+
+#### Note
+
+In fact, in several cases absence of implementation of some syntax (for example, text decoration and tables) is not a bug, but a feature, since some Markdown parsers adhere to the [CommonMark specification](https://spec.commonmark.org/). Other parsers, such as remarkable, allow you to enable the "CommonMark" mode optionally.
+
+The CommonMark specification aims to unify Markdown language. This can be useful, for example, if you need to transfer text in Markdown between different systems. However, for my site I needed extended functionality, so these parsers didn't suit me.
+
+Also, in a number of parsers, html tags considered unsafe (like `<iframe>`) are not rendered intentionally. This is called "html sanitizing". It is useful, for example, if the Markdown parser is used to render user-generated content. However, I will write all the content on the website myself, so this function will only bother me.
+
+### Ability to modify parser's behaviour
+
+Generally, parsers work according to the following algorithm:
+
+> Markdown -> parsing -> internal representation -> rendering -> HTML
+
+Some parsers allow to modify their inner logic. Parser can give you access to parsing and rendering functions or let you modify internal representation. This gives you the ability to insert additional functionality or to alter existing. Such extensibility opens the way for the evolution of the community plugins.
+
+I failed to find any mention of extensibility in the documentation of these parsers:
+1. commonmark.js
+2. MarkdownDeep
+
+Others will be investigated below:
+
+#### markdown-js
+
+markdown-js lets you access to its internal representations. The parser's logic is as follows:
+
+> Markdown -> parsing -> Markdown syntax tree -> conversion -> HTML syntax tree -> rendering -> html
+
+Internal representations are stored in a form of [JsonML](http://www.jsonml.org/) trees. You can access them by calling parsing, conversion and rendering functions separately one by one.
+
+#### markdown-it
+
+[The pipeline of markdown-it](https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md) consists of parser and renderer.
+
+Parser's behaviour is defined by rules, which are divided into 3 groups: `core`, `block` and `inline` (whatever that means). You can add your rules along with existing.
+
+The result of a parser is not a usual abstract syntax tree, but a list of tokens. The developers state that it's made for simplicity. Although I don't see any difficulty in syntax trees, flat structure should definitely have its own benefits.
+
+After the list of tokens is ready, you can modify it yourself on demand.
+
+Then, the list of tokens goes to the renderer, which is also extensible via custom rules.
+
+You can see the list of available plugins [here](https://www.npmjs.com/search?q=keywords:markdown-it-plugin).
+
+#### Marked
+
+Marked works mostly like others:
+
+> Markdown -> parser -> syntax tree -> renderer -> HTML
+
+However, the [documentation](https://marked.js.org/using_pro) uses the terms quite loosely.
+
+The parser, which is called `lexer`, manages a set of rules named `tokenizers`. You can both add your own tokenizers and modify built-in by some kind of subclassing the container for built-in tokenizer functions. Thus, you shadow functions from parent class with your own ones, but you can fall back to default behaviour by making your function return false.
+
+You can specify a function `walkTokens`, which receives a syntax tree as an input and should return it as an output. Any modifications of the tree can be done inside.
+
+The tree goes to the render (which is `parser` here) and it calls a set of rules called `renderers`. As with the parser, you can either add your own functions or inherit from existing ones.
+
+#### remark
+
+The remark project is developed with a passionate love to decomposition. Remark uses [mdast-util-from-markdown](https://github.com/syntax-tree/mdast-util-from-markdown) parser based on [micromark](https://github.com/micromark/micromark), [mdast](https://github.com/syntax-tree/mdast) syntax tree, which is an implementation of [unist](https://github.com/syntax-tree/unist) for Markdown, [mdast-util-to-markdown](https://github.com/syntax-tree/mdast-util-to-markdown) renderer and a wrapper called [unified](https://github.com/unifiedjs/unified) to put it all together. Hmmmm...
+
+Anyway, I don't really want to dive deep into all this, especially since this parser's logic is not particularly different from the others.
+
+On the other hand, the [list of plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins) for this project is rather impressive, so perhaps the micro repository approach has its own advantages.
+
+#### remarkable
+
+Due to remarkable having common roots with markdown-it (see below), their core logic is similar. I didn't go into details, so for the details of implementation, please go [here](https://github.com/jonschlinkert/remarkable/tree/master/docs ).
+
+You can see the list of plugins [here](https://www.npmjs.com/search?q=keywords:remarkable).
+
+#### Showdown
+
+It seems that [plugins in Showdown](https://github.com/showdownjs/showdown/wiki/extensions) are just a set of regular expressions and functions that sequentially modify the whole text.
+
+Logic can be defined as so:
+
+> Markdown -> regex/function 1 -> modified text -> regex/function 2 -> ... -> regex/function n -> HTML
+
+It's a pretty straightforward solution that lets you make plugins really easily.
+However, a significant flaw of this approach is a poor performance, because each function runs independently and has to parse the entire text from scratch.
+
+#### texts.js
+
+As far as I understand from the [documentation](https://github.com/sheremetyev/texts.js#textjson), it is possible to access the internal representation of texts.js, which is a custom JsonML implementation called TextJSON.
+
+#### Conclusion
+
+Interestingly, although all the examined parsers work on similar principles, they differ greatly in the details of the implementations.
+
+I like the logic of the markdown-js implementation - it's not overcomplicated and convenient for writing plugins. Unfortunately, markdown-js is not maintained anymore, and therefore I won't use it.
+
+The logic of the markdown-it, remarkable and Marked implementations is okay, but the documentation confuses with its terminology.
+
+Remark looks like the best-documented project, but its level of decomposition seems redundant.
+
+Plugins in Showdown are really easy to create, but at a price of significant performance reduction.
+
+It's difficult to say anything about texts.js due to incomplete documentation.
+
+To sum up, if you are for plugins, you can safely take:
+1. markdown-it
+2. Marked
+3. remark
+4. remarkable
+
+### Performance
+
+I could make benchmarking myself, but it was much easier to find existing benchmarks and compare them.
+
+#### Searching for benchmarks
+
+I've found 4 benchmarks:
+1. [сommonmark.js benchmark](https://github.com/commonmark/commonmark.js#performance) - 2015
+    - commonmark.js
+    - markdown-it
+    - Marked
+    - Showdown
+2. [markdown-it benchmark](https://github.com/markdown-it/markdown-it#benchmark) - 2015
+    - markdown-it
+    - Marked
+    - commonmark
+3. [remarkable benchmark](https://github.com/jonschlinkert/remarkable#benchmark) - 2014
+    - remarkable
+    - Marked
+    - commonmark
+4. [markdown-benchmark](https://github.com/mpneuried/markdown-benchmark#raw-results) - 2015
+    - markdown-js
+    - Marked
+    - showdown
+
+I haven't found benchmarks for:
+1. MarkdownDeep
+2. texts.js
+3. remark
+
+All these benchmarks were made at about the same time, so we will consider them comparable.
+
+The studies date back to 2014-2015, but we will consider them valid, because if the developers had significantly improved performance since then, they would have been written about it in the project's readme.
+
+Now, having these benchmarks, we can build the dependency graph:
+
+![Benchmarks](https://logosnikita.com/posts/markdown_parser/images/benchmarks.jpg)
+
+The colors of the arrows match with the colors of the benchmark authors.
+
+#### Comparison
+
+Performance is measured in operations per second, that is, the more, the better.
+
+I calculated the relative performance for each benchmark separately:
+1. commonmark
+    1. showdown = 1
+    2. commonmark.js ~ Marked ~ markdown-it = 3
+2. markdown-it
+    1. commonmark.js = 1
+    2. markdown-it = 0.6 (1.28 in CommonMark mode)
+    3. Marked = 1.3 (version 0.3.5)
+3. remarkable
+    1. commonmark.js = 1
+    2. remarkable = 1.88 (2.34 in CommonMark mode)
+    3. Marked = 0.573 (here is an old and slow version - 0.3.2)
+4. markdown
+    1. Showdown = 1
+    2. markdown-js = 0.61
+    3. Marked = 2.99
+
+Benchmarks analysis:
+1. You can see that commonmark.js, Marked and markdown-it are approximately 3 times faster than Showdown.
+2. Second benchmark's data roughly confirms first benchmark's data.
+3. According to the third benchmark, remarkable is 2 times faster than commonmark.js and therefore 6 times faster that Showdown. This is an impressive result, which is too good to be true. Since it is produced by the developers of remarkable, it can't be trusted too much. Considering that remarkable and markdown-it have the same roots, I assume that their performance is about the same.
+5. According to the fourth benchmark, markdown-js is 40% slower than Showdown.
+
+Now let's sum everything up. The first benchmark looks the most reliable, so I'll take the Showdown performance as a baseline.
+So, here is the comparative table I got:
+
+| Parser        | Performance | Source of evaluation |
+|:------------- |:----------- |:-------------------- |
+| commonmark.js | ~3          | 1                    |
+| markdown-js   | ~0.6        | 4                    |
+| markdown-it   | ~3          | 1                    |
+| Marked        | ~3          | 1, 4                 |
+| remarkable    | ~3 / ~6     | my guess / 3         |
+| Showdown      | 1           | -                    |
+
+#### Conclusion
+
+The results of the comparison show that markdown-js and Showdown are total performance outsiders, while other parsers are roughly at the same level.
+
+According to benchmark by remarkable developers, this parser is the fastest among all by a large margin. However, I doubt it.
+
+I am curious to see the performance of the remark parser. Maybe another time...
+
+To sum up, if you struggle for performance, you can safely choose:
+1. commonmark.js
+2. markdown-it
+3. Marked
+4. remarkable
+
+
+### Final choice
+
+According to the results of the comparison, two parsers won: markdown-it and remarkable. In fact, these projects have a lot in common, including common developers.
+
+Looking through the version histories of both projects, you can find a lot of interesting things. The remarkable project emerged first. A few months later, markdown-it appeared - most likely as a fork of the remarkable. Since then, the projects have been developing in parallel.
+
+Both projects have:
+1. MIT licence
+2. functioning live demo
+3. faultless results at syntax text
+4. great tools for extensibility
+5. a broad variety of plugins
+6. top performance
+
+Personally, I chose remarkable because it had a sample code in the demo and I was able to quickly integrate it into my project.
+
+In general, I didn't find any significant differences between these two parsers, so I recommend both!
+
+## How I set up the parser
+
+So, I chose remarkable, and I had to configure it.
+
+### What's out of the box
+
+I was pleasantly surprised that out of the box it supports a lot of [cool features](https://jonschlinkert.github.io/remarkable/demo/). Including those I didn't know about:
+
+1. Footnotes: text[^sample_footnote]
+2. Abbreviations: SQL
+
+[^sample_footnote]: Footnote **can have a markup**
+
+*[SQL]: Structured Query Language
+
+But what turned out to be exceptionally useful is the support of the collapsible blocks (spoilers):
+
+<details>
+  <summary>Click here to see the spoiler</summary>
+
+==It's a spoiler!==
+
+</details>
+
+### Plugins
+
+There are many interesting plugins on this [list](https://www.npmjs.com/search?q=keywords:remarkable).
+
+I made use of [remarkable-katex](https://www.npmjs.com/package/remarkable-katex) plugin based on [KaTeX](https://github.com/KaTeX/KaTeX) library for rendering LaTeX formulas in the web.
+
+With this plugin you can do things like this: $ \frac{1}{2} $
+
+And this:
+
+$$ \frac{1}{2} $$
+
+If you know Japanese, [remarkable-furigana](https://www.npmjs.com/package/remarkable-furigana) plugin may be useful for you, as it lets you draw the pronunciation of the hieroglyphs above them.
+
+I'll leave the rest of the plugins to you for self-study.
+
+### include
+
+On my site, I keep the sources of my articles as plain Markdown files. For convenience, I needed a way to include contents of some files into others.
+
+It would be wrong to solve this problem using remarkable, so I wrote a preprocessor function that receives the path to the root file as input and recursively inserts the necessary subfiles into it.
+
+For example, given such a file structure:
+- posts/
+    - main.md
+    - parts/
+        - part.md
+        - part2.md
+
+with such a file contents:
+
+```js
+// main.md
+
+// absolute path
+@include '/posts/parts/part.md'
+
+// or relative path
+@include './parts/part2.md'
+
+!!!
+```
+
+```js
+// part.md
+Hello
+```
+
+```js
+// part2.md
+world
+```
+
+we will render `main.md` into this:
+
+```js
+// output
+Hello
+
+world
+
+!!!
+```
+
+<details>
+  <summary>For those who are interested, here is the preprocessor code:</summary>
+
+@include "./code/preprocessor_code.md"
+
+</details>
+
+
+### Styles
+
+In order to customize articles' appearance, I created my own styles for all HTML components which can be obtained by Markdown to HTML conversion.
+
+<details>
+  <summary>Here is my stylesheet for those who are interested:</summary>
+
+@include "./code/styles_code.md"
+
+</details>
+
+I used [highlight.js](https://highlightjs.org/) for syntax highlight. You can see an example of how to use it on the [remarkable demo page](https://jonschlinkert.github.io/remarkable/demo/).
+
+
+## Conclusion
+
+It's time to sum up. The parser for my site is chosen and configured, which you are joyfully experiencing while reading this article in this blog.
+
+Working on this article, I learned a lot about Markdown and discovered it for myself from a new perspective.
+
+I will be glad if you enjoyed reading this little study. See you, and all the best!

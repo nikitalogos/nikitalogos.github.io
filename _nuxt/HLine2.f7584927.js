@@ -1,0 +1,1 @@
+import{o as e,c as _,_ as t}from"./entry.81a3d795.js";const o={},n={class:"gradient"};function s(c,a,r,p,d,i){return e(),_("hr",n)}const l=t(o,[["render",s],["__scopeId","data-v-d65f1ea9"]]);export{l as _};

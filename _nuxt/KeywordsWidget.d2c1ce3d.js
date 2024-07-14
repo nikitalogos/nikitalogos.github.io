@@ -1,0 +1,1 @@
+import{v as n,o as e,c as s,F as a,i as d,t as _,_ as c}from"./entry.81a3d795.js";const p=n({props:{keywords:Array}}),i={class:"keywords-wrapper"};function y(r,l,u,k,w,m){return e(),s("div",i,[(e(!0),s(a,null,d(r.keywords,(o,t)=>(e(),s("div",{class:"keyword",key:t},_(o),1))),128))])}const f=c(p,[["render",y],["__scopeId","data-v-76103b12"]]);export{f as K};

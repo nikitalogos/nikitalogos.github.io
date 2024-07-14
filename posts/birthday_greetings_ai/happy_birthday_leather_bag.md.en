@@ -1,0 +1,15 @@
+You can use it right now or copy the provided prompt and use it with any other neural network ([ChatGPT](https://chat.openai.com/), [Claude 2](https://chat.claudeai.ai/), [Llama 2 70b](https://huggingface.co/spaces/ysharma/Explore_llamav2_with_TGI)).
+
+I've tested the app with my friends, and they loved the results! The application creates unique and fun greetings that I'm sure you'll enjoy!
+
+I would be very happy to receive your feedback and comments. Your opinion is very important to me and will help me make the application even better.
+
+Here is the link to [GitHub](https://github.com/nikitalogos/birthday_greetings_ai), where you can learn more about the project.
+
+P.S. To interact with the neural network, you need to get a free token, which will be enough for 50-100 greetings. Authorization is done through GitHub and takes less than a minute. But, if for some reason you can't authorize, write to me (see [contacts](https://logosnikita.com/contacts)), and I will help you :)
+
+P.P.S. Initially, I planned that this would be an addition to my [birthday reminder](https://github.com/nikitalogos/birthday_reminder) app, but it seems to have turned into something more :)
+
+---
+
+The cover image was generated using Stable Diffusion at [Clipdrop.co](https://clipdrop.co/stable-diffusion)
